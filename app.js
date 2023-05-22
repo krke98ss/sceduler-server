@@ -9,8 +9,8 @@ const home =require("./src/controllers");
 const app = express();
 
 app.use(cors({
-  origin : process.env.FRONT_URL,
-  methods : ["GET", "POST", "PUT", "DELETE"],
+  origin : process.env.CLIENT_URL,
+  methods : ["GET", "POST", "PATCH", "DELETE", "PUT"],
   credentials : true
 }));
 
