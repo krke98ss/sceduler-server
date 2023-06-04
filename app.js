@@ -18,7 +18,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use('/uploads', express.static('uploads'));
 app.use("/", home);
+
 
 
 module.exports= app;

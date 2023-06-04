@@ -2,13 +2,13 @@ const db = require("../../config/db.config");
 const { param } = require('../../controllers');
 
 class TodoStorage {
-  static insert({ id, date, content, success, userId }) {
+  static insert({ id, date, content, time, tag_color, success, userId }) {
     return new Promise((resolve, reject) => {
       const query =
-        "INSERT INTO todos(id, date, content, success, user_id) VALUES(?, ?, ? ,?, ?);";
+        "INSERT INTO todos(id, date, content, time, tag_color,success, user_id ) VALUES(?, ?, ? ,?, ?, ?, ?);";
       db.query(
         query,
-        [id, new Date(date), content, success, userId],
+        [id, new Date(date), content, new Date(time), tag_color, success, userId],
         (err, data) => {
           if (err) reject(`${err}`);
           else resolve({ success: true });
@@ -41,18 +41,41 @@ class TodoStorage {
     });
   }
   static update(params) {
-    const query = `UPDATE todos set 
-    ${params.content ? "content" : "success"}=? WHERE id=?;`;
-    return new Promise((resolve, reject) => {
+    
+    let query = `UPDATE todos SET ${params.content ? 'content=? ' : 'success=? '}`;
+    let queryParam = [];
+
+    if(params.content){
+      queryParam.push(params.content);
+    } 
+    if(params.success !== null && params.success !== undefined){
+      queryParam.push(params.success);
+    }
+    if(params.time){
+      query +=', time=? '
+      queryParam.push(new Date(params.time));
+    }
+    if(params.tagColor){
+      query +=', tag_color=? '
+      queryParam.push(params.tagColor);
+    }
+    query+='WHERE id=?'
+    queryParam.push(params.id);
+
+    console.log(query); 
+    console.log(queryParam);
+    
+      return new Promise((resolve, reject) => {
       db.query(
         query,
-        [params?.content || params?.success, params.id],
+        queryParam,
         (err, data) => {
+          console.log(data);
           if (err) reject(`${err}`);
           else resolve({ success: true });
         }
       );
-    });
+    });   
   }
   static updateByDate ({userId, date, success}) {
     console.log(userId);

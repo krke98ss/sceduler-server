@@ -33,9 +33,9 @@ class UserStorage {
     }else if(param.profile_msg) {
       query += 'profile_msg=? WHERE id=?;';
     }
-    console.log(query);
+    
     const queryParam = [param.profileImg || param.nickname || param.profile_msg, param.userId]
-    console.log(queryParam)
+    
     return new Promise((resolve, reject) => {
       db.query(
         query,
@@ -44,6 +44,38 @@ class UserStorage {
           console.log(data);
           if (err) reject(`${err}`);
           else resolve({ success: true });
+        }
+      );
+    }); 
+  }
+
+  static removeImg(userId) {
+    console.log(userId);
+    const query = 'UPDATE users SET profile_img=null WHERE id=?;'
+    return new Promise((resolve, reject) => {
+      db.query(
+        query,
+        [userId],
+        (err, data) => {
+          console.log(data);
+          if (err) reject(`${err}`);
+          else resolve({ success: true });
+        }
+      );
+    }); 
+  }
+
+  static selectCurrentImg(userId) {
+    console.log(userId);
+    const query = 'SELECT profile_img FROM users WHERE id =?;';
+    return new Promise((resolve, reject) => {
+      db.query(
+        query,
+        [userId],
+        (err, data) => {
+          console.log(data[0]);
+          if (err) reject(`${err}`);
+          else resolve(data[0]);
         }
       );
     }); 

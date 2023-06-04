@@ -5,7 +5,7 @@ const TodoController = {
     console.log(req.body);
     try {
       const todo = new Todo(req.body);
-      const response = await todo.addTodo();
+      const response = await todo.addTodo(); 
       res.status(200).json(response);
     } catch (err) {
       return res.status(500).json(err);
@@ -33,14 +33,14 @@ const TodoController = {
     }
   },
   modifyTodo: async (req, res) => {
-    
+    console.log(req.body);
     try {
       const todo = new Todo(req.body);
       const response = await todo.modifyTodo();
       res.status(200).json(response);
     } catch (err) {
       return res.status(500).json(err);
-    }
+    } 
   },
   
   

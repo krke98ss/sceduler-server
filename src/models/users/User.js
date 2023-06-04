@@ -1,6 +1,7 @@
 
 const bcrypt  = require('bcrypt');
-const { select, insert, update } = require('./UserStorage');
+const fs  = require('fs');
+const { select, insert, update, removeImg, selectCurrentImg } = require('./UserStorage');
 
 
 
@@ -36,7 +37,25 @@ class User {
   }
 
   async modifyInfo () {
+    
     return await update(this.user);
+  }
+  async updateProfileImg () {
+    
+    const response = await selectCurrentImg(this.user.userId);
+    const currentImgPath = response?.profile_img;
+    if(currentImgPath){
+      const currentImg = currentImgPath.split(process.env.SERVER_URL)[1];
+      if(fs.existsSync(currentImg)){
+        fs.unlinkSync(currentImg);
+      }
+    }
+    return await this.modifyInfo(this.user);
+    
+  }
+
+  async removeProfileImg () {
+    return await removeImg(this.user);
   }
 }
 

@@ -9,7 +9,7 @@ const generateToken = (userInfo) => {
     },
     process.env.ACCESS_KEY,
     {
-      expiresIn: "5m",
+      expiresIn: "60m",
       issuer: "YOONO",
     }
   );
